@@ -19,9 +19,10 @@ export default function CommentSection({ postId, userId }) {
     setLoading(true);
     const { data, error } = await supabase
       .from("comments")
-      .select("*")
+      .select("id, post_id, user_id, content, created_at, parent_id, profiles(username)")
       .eq("post_id", postId)
       .order("created_at", { ascending: true });
+    console.log(data);
     setComments(data || []);
     setLoading(false);
   }
@@ -49,7 +50,7 @@ export default function CommentSection({ postId, userId }) {
       <ul>
         {comments.map(comment => (
           <li key={comment.id}>
-            <strong>{comment.user_id}</strong>: {comment.content}
+            <strong>{comment.profiles.username}</strong>: {comment.content}
             <span className="comment-date"> ({new Date(comment.created_at).toLocaleString()})</span>
           </li>
         ))}

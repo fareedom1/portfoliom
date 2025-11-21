@@ -11,6 +11,8 @@ export default function PostCard({
   date,        // Creation date (should be formatted before passing, or you can format here)
   likeCount,   // Total number of likes for this post
 }) {
+  console.log(likeCount);
+  console.log(author);
   return (
     <div className="post-card">
       {/* Featured Project Image */}

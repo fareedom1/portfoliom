@@ -13,9 +13,53 @@ export default function MyPosts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch();
+    fetchPosts();
     // eslint-disable-next-line
   }, [userId]);
+
+  // Fetch posts and like counts (count likes in JS, sort in JS)
+  async function fetchPosts() {
+    setLoading(true);
+
+    // 1. Get all posts with author profile
+    const { data: posts, error } = await supabase
+      .from("portfolio_posts")
+      .select("id, title, description, image_url, created_at, user_id, profiles(username)")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+
+    // 2. Get all likes (rows with post_id)
+    const { data: allLikes, error: likesError } = await supabase
+      .from("likes")
+      .select("id, post_id");
+
+    if (error || !posts || likesError) {
+      setPosts([]);
+      setLoading(false);
+      return;
+    }
+
+    // 3. Build like counts: post_id -> count
+    const likeCountMap = {};
+    (allLikes || []).forEach(like => {
+      if (!likeCountMap[like.post_id]) likeCountMap[like.post_id] = 0;
+      likeCountMap[like.post_id]++;
+    });
+
+    // 4. Merge like counts with posts
+    let mergedPosts = (posts || []).map(post => ({
+      id: post.id,
+      title: post.title,
+      description: post.description,
+      imageUrl: post.image_url,
+      author: post.profiles?.username || "Unknown",
+      date: new Date(post.created_at).toLocaleDateString(),
+      likeCount: likeCountMap[post.id] || 0,
+    }));
+
+    setPosts(mergedPosts);
+    setLoading(false);
+  }
 
   async function fetch() {
     setLoading(true);

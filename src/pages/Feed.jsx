@@ -1,70 +1,88 @@
-// src/pages/Feed.jsx
 import { useEffect, useState } from "react";
 import supabase from "../supabase/client.js";
 import PostCard from "../components/PostCard.jsx";
 
 /**
- * Portfolio feed — supports sorting by newest or top (most liked).
+ * Portfolio feed — supports sorting by newest or top (most liked) and searching by post title.
  */
 export default function Feed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sort, setSort] = useState("newest");
+  const [search, setSearch] = useState(""); // <-- New state for search input
 
   useEffect(() => {
     fetchPosts();
     // eslint-disable-next-line
   }, [sort]);
 
-  // Fetch posts (with author info and like counts)
+  // Fetch posts and like counts (count likes in JS, sort in JS)
   async function fetchPosts() {
     setLoading(true);
 
-    // Supabase join + like count aggregation
-    let query = supabase
+    // 1. Get all posts with author profile
+    const { data: posts, error } = await supabase
       .from("portfolio_posts")
-      .select(`
-        id, title, description, image_url, created_at, user_id,
-        profiles(username),
-        likes(count)
-      `);
+      .select("id, title, description, image_url, created_at, user_id, profiles(username)");
 
-    // Sorting: by newest or most liked
-    if (sort === "top") {
-      // Order by aggregated likes descending
-      // Supabase creates 'likes' join as an array of 1 object with a 'count'
-      query = query.order("likes", { ascending: false });
-    } else {
-      query = query.order("created_at", { ascending: false });
-    }
+    // 2. Get all likes (rows with post_id)
+    const { data: allLikes, error: likesError } = await supabase
+      .from("likes")
+      .select("id, post_id");
 
-    const { data, error } = await query;
-    if (error) {
+    if (error || !posts || likesError) {
       setPosts([]);
       setLoading(false);
       return;
     }
 
-    // Format posts for PostCard
-    const formatted = (data || []).map(post => ({
+    // 3. Build like counts: post_id -> count
+    const likeCountMap = {};
+    (allLikes || []).forEach(like => {
+      if (!likeCountMap[like.post_id]) likeCountMap[like.post_id] = 0;
+      likeCountMap[like.post_id]++;
+    });
+
+    // 4. Merge like counts with posts
+    let mergedPosts = (posts || []).map(post => ({
       id: post.id,
       title: post.title,
-      description: post.description,
-      imageUrl: post.image_url,
-      author: post.profiles?.username || "Unknown",
+      //main feed limited meta data requirement: comment out later
+      //description: post.description,
+      //imageUrl: post.image_url,
+      //author: post.profiles?.username || "Unknown",
       date: new Date(post.created_at).toLocaleDateString(),
-      likeCount: Array.isArray(post.likes) && post.likes.length > 0 
-        ? post.likes[0].count 
-        : 0,
+      likeCount: likeCountMap[post.id] || 0,
     }));
 
-    setPosts(formatted);
+    // 5. Sort locally in JS
+    if (sort === "top") {
+      mergedPosts.sort((a, b) => b.likeCount - a.likeCount);
+    } else {
+      mergedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    setPosts(mergedPosts);
     setLoading(false);
   }
+
+  // Filter posts based on search query (case-insensitive)
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="feed-container">
       <h2 className="feed-title">Portfolio Feed</h2>
+      {/* Search input */}
+      <input
+        type="text"
+        placeholder="Search by title..."
+        className="feed-search-box"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
+      />
       <div className="feed-sorting">
         <button
           className={sort === "newest" ? "feed-sort-btn active" : "feed-sort-btn"}
@@ -80,10 +98,10 @@ export default function Feed() {
         </button>
       </div>
       {loading && <div className="feed-loading">Loading...</div>}
-      {!loading && posts.length === 0 && <div className="feed-empty">No posts found.</div>}
+      {!loading && filteredPosts.length === 0 && <div className="feed-empty">No posts found.</div>}
       <div className="feed-list">
         {!loading &&
-          posts.map(post => (
+          filteredPosts.map(post => (
             <PostCard key={post.id} {...post} />
           ))}
       </div>

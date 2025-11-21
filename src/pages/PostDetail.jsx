@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import supabase from "../supabase/client.js";
 import PostForm from "../components/PostForm.jsx";
 import LikeButton from "../components/LikeButton.jsx";
@@ -10,21 +10,24 @@ import CommentSection from "../components/CommentSection.jsx";
  */
 export default function PostDetail() {
   const { id } = useParams();
+  const navigate = useNavigate(); // Navigates after delete
   const [post, setPost] = useState(null);
   const [userId, setUserId] = useState(null);
   const [editing, setEditing] = useState(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
-
-  // Likes logic
   const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     fetchPost();
     getUser();
-    fetchLikeCount();
     // eslint-disable-next-line
   }, [id]);
+
+  useEffect(() => {
+    fetchLikeCount();
+    console.log("current likes: " + likeCount);
+  }, [id, userId]);
 
   async function fetchPost() {
     const { data } = await supabase
@@ -41,15 +44,15 @@ export default function PostDetail() {
   }
 
   async function fetchLikeCount() {
-    // Get the total number of likes for the current post
+    // Always get the current total like count for this post
     const { count } = await supabase
       .from("likes")
-      .select('*', { count: 'exact', head: true })
+      .select('user_id', { count: 'exact', head: true })
       .eq("post_id", id);
-    setLikeCount(count || 0);
+    setLikeCount(count);
+    console.log("fetched like count: "+ count);
   }
 
-  // Update the post (edit)
   async function handleUpdate(updatedData) {
     setLoading(true);
     setStatus("");
@@ -60,7 +63,7 @@ export default function PostDetail() {
         updated_at: new Date(),
       })
       .eq("id", id)
-      .eq("user_id", userId); // Secure: user only updates their own post
+      .eq("user_id", userId);
     setLoading(false);
 
     if (error) {
@@ -68,13 +71,32 @@ export default function PostDetail() {
     } else {
       setEditing(false);
       setStatus("Post updated!");
-      fetchPost(); // Refresh details
+      fetchPost();
+    }
+  }
+
+  // New: handle delete function
+  async function handleDelete() {
+    if (!window.confirm("Are you sure you want to delete this post? This cannot be undone.")) return;
+
+    setLoading(true);
+    const { error } = await supabase
+      .from("portfolio_posts")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", userId);
+    setLoading(false);
+
+    if (error) {
+      setStatus("Error deleting post: " + error.message);
+    } else {
+      setStatus("Post deleted!");
+      navigate("/feed"); // Redirect to feed after deletion
     }
   }
 
   if (!post) return <div>Loading Post...</div>;
 
-  // Only owners see edit controls
   const isOwner = userId && post.user_id === userId;
 
   return (
@@ -95,15 +117,11 @@ export default function PostDetail() {
         </a>
       </p>
 
-      {/* Show the current like count */}
       <div className="post-detail-likes" style={{ marginBottom: "0.7rem" }}>
         <span role="img" aria-label="likes">👍</span> {likeCount}
       </div>
-
-      {/* Like button for all logged-in users */}
       <LikeButton postId={post.id} userId={userId} onLikeChanged={fetchLikeCount} />
 
-      {/* Owner edit controls */}
       {isOwner && (
         <>
           <button
@@ -113,17 +131,26 @@ export default function PostDetail() {
             {editing ? "Cancel" : "Edit Post"}
           </button>
           {editing && (
-            <PostForm
-              initialData={post}
-              onSubmit={handleUpdate}
-              loading={loading}
-            />
+            <>
+              <PostForm
+                initialData={post}
+                onSubmit={handleUpdate}
+                loading={loading}
+              />
+              {/* Add Delete Button */}
+              <button
+                onClick={handleDelete}
+                className="post-delete-btn"
+                style={{ marginTop: "1rem", background: "#F44336", color: "#fff", border: "none", padding: "0.5rem 1rem", cursor: "pointer" }}
+                disabled={loading}
+              >
+                Delete Post
+              </button>
+            </>
           )}
           {status && <div className="form-status">{status}</div>}
         </>
       )}
-
-      {/* Comments, shown to all */}
       <CommentSection postId={post.id} userId={userId} />
     </div>
   );
