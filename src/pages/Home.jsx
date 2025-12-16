@@ -15,7 +15,7 @@ export default function Home() {
                 <li>Comment and exchange feedback</li>
             </ul>
             <div className="home-cta">
-                <p>Ready to showcase your work? Create an account or log in below </p>
+                <p>Ready to showcase your work? Create an account or log in below </p><br></br>
                 <Link className="cta-btn" to ="/login"> Sign Up</Link>
                 <Link className="cta-btn" to ="/login"> Log In</Link>
             </div>
