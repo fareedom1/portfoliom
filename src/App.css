@@ -28,7 +28,7 @@ body {
   margin: 0;
   min-height: 100vh;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
-  background: radial-gradient(circle at top, var(--bg-) 0%, var(--bg-elevated) 50%, black 100%);
+  background: radial-gradient(circle at top, var(--bg-main) 0%, var(--bg-elevated) 50%, black 100%);
   color: var(--text-main);
   display: block;
 
