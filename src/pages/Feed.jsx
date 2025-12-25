@@ -47,10 +47,9 @@ export default function Feed() {
     let mergedPosts = (posts || []).map(post => ({
       id: post.id,
       title: post.title,
-      //main feed limited meta data requirement: comment out later
-      //description: post.description,
-      //imageUrl: post.image_url,
-      //author: post.profiles?.username || "Unknown",
+      description: post.description,
+      imageUrl: post.image_url,
+      author: post.profiles?.username || "Unknown",
       date: new Date(post.created_at).toLocaleDateString(),
       likeCount: likeCountMap[post.id] || 0,
     }));
