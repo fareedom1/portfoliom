@@ -70,35 +70,37 @@ export default function Feed() {
     post.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const sortBtnBase = "rounded-full border border-slate-700 bg-slate-900/85 text-gray-400 px-5 py-1.5 text-sm cursor-pointer transition-colors duration-200 hover:bg-sky-400 hover:text-slate-950 hover:border-transparent";
+  const sortBtnActive = "bg-sky-400 text-slate-950 border-transparent";
+
   return (
-    <div className="feed-container">
-      <h2 className="feed-title">Portfolio Feed</h2>
+    <div className="max-w-[960px] mx-auto mt-10 px-5 pb-14">
+      <h2 className="text-3xl font-bold mb-3 text-center">Portfolio Feed</h2>
       {/* Search input */}
       <input
         type="text"
         placeholder="Search by title..."
-        className="feed-search-box"
+        className="w-full mb-4 p-2 rounded-lg border border-slate-700 bg-slate-900 text-gray-200 focus:border-sky-500 outline-none block"
         value={search}
         onChange={e => setSearch(e.target.value)}
-        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%" }}
       />
-      <div className="feed-sorting">
+      <div className="flex justify-center gap-3 mb-8">
         <button
-          className={sort === "newest" ? "feed-sort-btn active" : "feed-sort-btn"}
+          className={`${sortBtnBase} ${sort === "newest" ? sortBtnActive : ""}`}
           onClick={() => setSort("newest")}
         >
           Newest
         </button>
         <button
-          className={sort === "top" ? "feed-sort-btn active" : "feed-sort-btn"}
+          className={`${sortBtnBase} ${sort === "top" ? sortBtnActive : ""}`}
           onClick={() => setSort("top")}
         >
           Top
         </button>
       </div>
-      {loading && <div className="feed-loading">Loading...</div>}
-      {!loading && filteredPosts.length === 0 && <div className="feed-empty">No posts found.</div>}
-      <div className="feed-list">
+      {loading && <div className="text-center mt-8 text-gray-400">Loading...</div>}
+      {!loading && filteredPosts.length === 0 && <div className="text-center mt-8 text-gray-400">No posts found.</div>}
+      <div className="grid grid-cols-1 gap-6">
         {!loading &&
           filteredPosts.map(post => (
             <PostCard key={post.id} {...post} />

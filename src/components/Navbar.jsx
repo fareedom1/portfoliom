@@ -27,27 +27,29 @@ export default function Navbar() {
     navigate("/");
   }
 
+  const navItemClasses = "text-gray-400 text-base font-medium px-3.5 py-1.5 rounded-full border-none bg-transparent cursor-pointer transition-all duration-200 hover:bg-teal-900/35 hover:text-gray-200 hover:-translate-y-px inline-block";
+
   return (
-    <nav className="navbar">
-      <ul className="navbar-list">
+    <nav className="w-screen sticky top-0 z-20 backdrop-blur-lg bg-gradient-to-r from-slate-900/95 to-slate-900/80 border-b border-slate-400/15 px-7 py-3 flex justify-between items-center">
+      <ul className="flex gap-5 list-none m-0 p-0">
         {session ? (
           <>
-            <li><Link to="/feed">Feed</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-            <li><Link to="/create-post">Create Post</Link></li>
-            <li><Link to={`/my-posts/${session?.user?.id}`}>My Posts</Link></li>
-            <li><Link to="/feedback">Feedback</Link></li>
+            <li><Link to="/feed" className={navItemClasses}>Feed</Link></li>
+            <li><Link to="/profile" className={navItemClasses}>Profile</Link></li>
+            <li><Link to="/create-post" className={navItemClasses}>Create Post</Link></li>
+            <li><Link to={`/my-posts/${session?.user?.id}`} className={navItemClasses}>My Posts</Link></li>
+            <li><Link to="/feedback" className={navItemClasses}>Feedback</Link></li>
             <li>
-              <button className="navbar-item" onClick={handleLogout}>
+              <button className={navItemClasses} onClick={handleLogout}>
                 Logout
               </button>
             </li>
           </>
         ) : (
           <>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/feedback">Feedback</Link></li>
+            <li><Link to="/" className={navItemClasses}>Home</Link></li>
+            <li><Link to="/login" className={navItemClasses}>Login</Link></li>
+            <li><Link to="/feedback" className={navItemClasses}>Feedback</Link></li>
           </>
         )}
       </ul>

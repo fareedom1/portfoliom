@@ -26,14 +26,14 @@ export default function Profile() {
   }
 
   return (
-    <div className="profile-view">
-      <h2>My Profile</h2>
+    <div className="max-w-[780px] mx-auto mt-12 p-8 pt-7 rounded-2xl bg-[#0b1020] border border-slate-700/30 shadow-[var(--shadow-soft)] max-md:p-6 max-md:mx-4">
+      <h2 className="mt-0 mb-6 text-3xl font-bold">My Profile</h2>
       {profile ? (
-        <>
-          <p>Username: {profile.username}</p>
-          <p>Email: {profile.email}</p>
-        </>
-      ) : <div>Loading...</div>}
+        <div className="flex flex-col gap-3">
+          <p className="text-lg text-gray-300"><span className="font-semibold text-gray-400">Username:</span> {profile.username}</p>
+          <p className="text-lg text-gray-300"><span className="font-semibold text-gray-400">Email:</span> {profile.email}</p>
+        </div>
+      ) : <div className="text-gray-400">Loading...</div>}
     </div>
   );
 }

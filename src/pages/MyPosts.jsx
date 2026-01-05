@@ -73,10 +73,10 @@ export default function MyPosts() {
   }
 
   return (
-    <div className="my-posts">
-      <h2>My Portfolio Posts</h2>
-      {loading && <div>Loading...</div>}
-      <div>
+    <div className="max-w-[780px] mx-auto mt-12 p-8 pt-7 rounded-2xl bg-[#0b1020] border border-slate-700/30 shadow-[var(--shadow-soft)] max-md:p-6 max-md:mx-4">
+      <h2 className="mt-0 mb-6 text-3xl font-bold text-center">My Portfolio Posts</h2>
+      {loading && <div className="text-center text-gray-400">Loading...</div>}
+      <div className="grid grid-cols-1 gap-6">
         {posts.map(post => <PostCard key={post.id} {...post} />)}
       </div>
     </div>

@@ -50,7 +50,7 @@ export default function PostDetail() {
       .select('user_id', { count: 'exact', head: true })
       .eq("post_id", id);
     setLikeCount(count);
-    console.log("fetched like count: "+ count);
+    console.log("fetched like count: " + count);
   }
 
   async function handleUpdate(updatedData) {
@@ -100,38 +100,38 @@ export default function PostDetail() {
   const isOwner = userId && post.user_id === userId;
 
   return (
-    <div className="post-detail">
-      <h2>{post.title}</h2>
+    <div className="max-w-[760px] mx-auto mt-10 p-9 pb-9 rounded-3xl bg-[radial-gradient(circle_at_top_left,#1f2937_0%,#020617_70%)] border border-slate-700/70 shadow-[var(--shadow-soft)] max-md:p-6 max-md:mx-4">
+      <h2 className="mt-0 mb-3 text-3xl font-bold">{post.title}</h2>
       {post.image_url && (
         <img
           src={post.image_url}
           alt={post.title}
-          style={{ maxWidth: '320px' }}
+          className="rounded-xl my-4 object-cover w-full max-w-[320px] block"
         />
       )}
-      <p>{post.description}</p>
-      <p>
-        Website:{" "}
-        <a href={post.website_url} target="_blank" rel="noopener noreferrer">
+      <p className="text-gray-300 leading-relaxed mb-4">{post.description}</p>
+      <p className="mb-6">
+        <span className="text-gray-400 mr-2">Website:</span>
+        <a href={post.website_url} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:text-sky-300 font-medium break-all">
           {post.website_url}
         </a>
       </p>
 
-      <div className="post-detail-likes" style={{ marginBottom: "0.7rem" }}>
-        <span role="img" aria-label="likes">👍</span> {likeCount}
+      <div className="flex items-center gap-2 mb-3">
+        <span role="img" aria-label="likes" className="text-lg">👍</span> <span className="font-semibold text-lg">{likeCount}</span>
       </div>
       <LikeButton postId={post.id} userId={userId} onLikeChanged={fetchLikeCount} />
 
       {isOwner && (
-        <>
+        <div className="mt-6 border-t border-slate-700 pt-4">
           <button
             onClick={() => setEditing(e => !e)}
-            style={{ marginBottom: "1rem" }}
+            className="mb-4 text-sky-400 hover:text-sky-300 text-sm font-semibold bg-transparent border-none cursor-pointer"
           >
-            {editing ? "Cancel" : "Edit Post"}
+            {editing ? "Cancel Edit" : "Edit Post"}
           </button>
           {editing && (
-            <>
+            <div className="mb-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
               <PostForm
                 initialData={post}
                 onSubmit={handleUpdate}
@@ -140,16 +140,15 @@ export default function PostDetail() {
               {/* Add Delete Button */}
               <button
                 onClick={handleDelete}
-                className="post-delete-btn"
-                style={{ marginTop: "1rem", background: "#F44336", color: "#fff", border: "none", padding: "0.5rem 1rem", cursor: "pointer" }}
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white border-none px-4 py-2 rounded-lg cursor-pointer text-sm font-semibold transition-colors"
                 disabled={loading}
               >
                 Delete Post
               </button>
-            </>
+            </div>
           )}
-          {status && <div className="form-status">{status}</div>}
-        </>
+          {status && <div className="mt-2 text-sm text-green-400">{status}</div>}
+        </div>
       )}
       <CommentSection postId={post.id} userId={userId} />
     </div>

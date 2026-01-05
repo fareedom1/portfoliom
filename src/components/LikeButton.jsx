@@ -6,7 +6,7 @@ export default function LikeButton({ postId, userId, onLikeChanged }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("Post id: "+postId+ ". User id: "+userId);
+    console.log("Post id: " + postId + ". User id: " + userId);
     checkLiked();
     // eslint-disable-next-line
   }, [postId, userId]);
@@ -32,7 +32,7 @@ export default function LikeButton({ postId, userId, onLikeChanged }) {
       setLoading(false);
       return;
     }
-  
+
     if (liked) {
       await supabase
         .from("likes")
@@ -52,14 +52,14 @@ export default function LikeButton({ postId, userId, onLikeChanged }) {
       }
       setLiked(true);
     }
-  
+
     setLoading(false);
     if (onLikeChanged) onLikeChanged();
   }
-  
+
 
   return (
-    <button className="like-btn" onClick={handleLike} disabled={loading || !userId}>
+    <button className="rounded-full border border-slate-500/15 bg-slate-900/90 py-1 px-3.5 text-sm cursor-pointer text-gray-50 flex items-center gap-2 hover:scale-110 hover:text-red-400 transition-transform disabled:opacity-50 disabled:cursor-not-allowed" onClick={handleLike} disabled={loading || !userId}>
       {liked ? "❤️ Liked" : "🤍 Like"}
     </button>
   );

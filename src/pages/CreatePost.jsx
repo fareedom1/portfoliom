@@ -39,10 +39,10 @@ export default function CreatePost() {
   }
 
   return (
-    <div>
-      <h2>Create Portfolio Post</h2>
+    <div className="max-w-[700px] mt-12 mx-auto p-10 rounded-2xl bg-[#0b1020] border border-slate-800 shadow-[var(--shadow-soft)] max-md:p-6 max-md:mx-4">
+      <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Create Portfolio Post</h2>
       <PostForm onSubmit={handleSubmit} loading={loading} />
-      {status && <div className="form-status">{status}</div>}
+      {status && <div className="mt-4 text-center text-red-400 text-sm font-medium">{status}</div>}
     </div>
   );
 }

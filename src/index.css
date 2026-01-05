@@ -1,11 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-main: #050816;
+  --color-bg-elevated: #0b1020;
+  --color-bg-soft: #111827;
+  --color-accent: #38bdf8;
+  --color-accent-soft: #0ea5e9;
+  --color-accent-danger: #f97373;
+  --color-text-main: #e5e7eb;
+  --color-text-muted: #9ca3af;
+  --color-border-subtle: #1f2937;
+}
+
 :root {
+  --bg-main: #050816;
+  --bg-elevated: #0b1020;
+  --bg-soft: #111827;
+  --accent: #38bdf8;
+  --accent-soft: #0ea5e9;
+  --accent-danger: #f97373;
+  --logo-gradient: var(--accent), #a855f7, #f97316;
+  --text-main: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-subtle: #1f2937;
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.55);
+  --radius-lg: 14px;
+  --radius-md: 8px;
+  --transition-fast: 0.18s ease-out;
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text-main);
+  background: radial-gradient(circle at top, var(--bg-main) 0%, var(--bg-elevated) 50%, black 100%);
+  background-attachment: fixed;
+  /* fix background for scrolling */
+
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,14 +50,13 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -46,9 +77,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -59,9 +92,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
