@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Home() {
     return (
         <div className="w-1/2 mt-20 mx-auto px-32 py-10 bg-[radial-gradient(circle_at_top_left,#1f2937_0%,#020617_65%)] rounded-3xl shadow-[var(--shadow-soft)] text-center border border-slate-400/20 flex flex-col max-md:mt-10 max-md:px-6 max-md:w-[90%]">
-            <h1 className="text-7xl tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)]">
+            <h1 className="tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)] ">
                 Portfoliom
             </h1>
             <p className="text-lg text-gray-400 mb-6 font-medium">Showcase your portfolio projects and connect with others.</p>
