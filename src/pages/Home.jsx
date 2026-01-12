@@ -6,21 +6,28 @@ export default function Home() {
             <h1 className="tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)] ">
                 Portfoliom
             </h1>
-            <p className="text-lg text-gray-400 mb-6 font-medium">Showcase your portfolio projects and connect with others.</p>
-            <p className="text-indigo-100 text-base mb-8 leading-relaxed max-w-2xl mx-auto">
-                Portfoliom lets you showcase your best portfolio projects, connect with other creators, get feedback, and find inspiration in the work of your peers.
-            </p>
+            <p className="text-lg text-gray-400 mb-6 font-medium">Connect, Collaborate, and Upgrade your portfolio.</p>
             <ul className="text-left max-w-[440px] mx-auto mb-8 pl-5 text-gray-400 space-y-2 list-disc marker:text-sky-500">
                 <li>Share your personal portfolio projects</li>
                 <li>View and get inspired by others’ work</li>
-                <li>Like impressive portfolios</li>
-                <li>Comment and exchange feedback</li>
+                <li>Like and Comment on impressive portfolios</li>
+                <li>Connect with other creators and exchange feedback</li>
             </ul>
             <div className="mt-2 mb-8">
-                <p className="mb-4 text-gray-300">Ready to showcase your work? Create an account or log in below</p>
+                <p className="mb-4 text-gray-300"> <span className="block">Ready to showcase your work?</span>Create an account or log in below</p>
                 <div className="flex justify-center gap-3">
-                    <Link className="border-none cursor-pointer px-7 py-2.5 rounded-full font-semibold text-sm bg-gradient-to-br from-sky-400 to-indigo-500 text-slate-950 shadow-[0_0_25px_rgba(56,189,248,0.45)] transition-all duration-200 hover:-translate-y-px hover:brightness-105 hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] inline-block" to="/login">Sign Up</Link>
-                    <Link className="border-none cursor-pointer px-7 py-2.5 rounded-full font-semibold text-sm bg-gradient-to-br from-sky-400 to-indigo-500 text-slate-950 shadow-[0_0_25px_rgba(56,189,248,0.45)] transition-all duration-200 hover:-translate-y-px hover:brightness-105 hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] inline-block" to="/login">Log In</Link>
+                    <Link className="border border-sky-500/30 cursor-pointer px-7 py-2.5 rounded-full 
+                    font-semibold text-sm bg-slate-950 text-sky-400 
+                    shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-all duration-300 
+                    hover:bg-gradient-to-br hover:from-sky-400 hover:to-indigo-500 
+                    hover:text-slate-950 hover:-translate-y-px hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] 
+                    hover:border-transparent inline-block" to="/login">Sign Up</Link>
+                    <Link className="border border-sky-500/30 cursor-pointer px-7 py-2.5 rounded-full 
+                    font-semibold text-sm bg-slate-950 text-sky-400 
+                    shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-all duration-300 
+                    hover:bg-gradient-to-br hover:from-sky-400 hover:to-indigo-500 
+                    hover:text-slate-950 hover:-translate-y-px hover:shadow-[0_0_40px_rgba(56,189,248,0.55)] 
+                    hover:border-transparent inline-block" to="/login">Log In</Link>
                 </div>
             </div>
             <div className="text-sm text-gray-400">
