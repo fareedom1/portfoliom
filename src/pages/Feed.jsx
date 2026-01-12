@@ -23,7 +23,7 @@ export default function Feed() {
     // 1. Get all posts with author profile
     const { data: posts, error } = await supabase
       .from("portfolio_posts")
-      .select("id, title, description, image_url, created_at, user_id, profiles(username)");
+      .select("id, title, description, image_url, created_at, updated_at, user_id, profiles(username)");
 
     // 2. Get all likes (rows with post_id)
     const { data: allLikes, error: likesError } = await supabase
@@ -43,22 +43,36 @@ export default function Feed() {
       likeCountMap[like.post_id]++;
     });
 
-    // 4. Merge like counts with posts
-    let mergedPosts = (posts || []).map(post => ({
-      id: post.id,
-      title: post.title,
-      description: post.description,
-      imageUrl: post.image_url,
-      author: post.profiles?.username || "Unknown",
-      date: new Date(post.created_at).toLocaleDateString(),
-      likeCount: likeCountMap[post.id] || 0,
-    }));
+    // 4. Merge like counts with posts and calculate sorting timestamp
+    let mergedPosts = (posts || []).map(post => {
+      // Calculate the most recent time between created_at and updated_at
+      const createdTime = new Date(post.created_at).getTime();
+      const updatedTime = new Date(post.updated_at).getTime();
+      // Use the later of the two dates for sorting
+      const mostRecentTime = Math.max(createdTime, updatedTime);
+
+      return {
+        id: post.id,
+        title: post.title,
+        description: post.description,
+        imageUrl: post.image_url,
+        author: post.profiles?.username || "Unknown",
+        // Format date for display (e.g. "1/12/2026")
+        date: new Date(mostRecentTime).toLocaleDateString(),
+        // Keep raw timestamp for precise sorting (down to the millisecond)
+        timestamp: mostRecentTime,
+        likeCount: likeCountMap[post.id] || 0,
+      };
+    });
 
     // 5. Sort locally in JS
     if (sort === "top") {
+      // Sort by like count descending
       mergedPosts.sort((a, b) => b.likeCount - a.likeCount);
     } else {
-      mergedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // Sort by the calculated timestamp descending (newest first)
+      // This ensures we sort by the exact minute/second of the last update or creation
+      mergedPosts.sort((a, b) => b.timestamp - a.timestamp);
     }
 
     setPosts(mergedPosts);
@@ -76,7 +90,7 @@ export default function Feed() {
   return (
     <div className="max-w-[960px] mx-auto mt-10 px-5 pb-14">
       <h1 className="text-3xl font-bold mb-3 text-center tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)] ">
-    Portfoliom
+        Portfoliom
       </h1>
       {/* Search input */}
       <input
