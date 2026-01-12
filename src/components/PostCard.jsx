@@ -26,18 +26,16 @@ export default function PostCard({
 
       <div className="px-4 pt-3 pb-4">
         {/* Title links to detail page */}
-        <div className="mb-2">
-          <h3 className="m-0 inline text-[0.95rem] mr-1.5">
+        <div className="mb-5">
+          <h3 className="m-0 text-[0.95rem] mr-1.5">
             <Link to={`/post/${id}`} className="text-gray-200 font-bold hover:underline">{title}</Link>
           </h3>
-          <p className="inline text-gray-200 m-0 text-[0.92rem] leading-relaxed">{description}</p>
+          <p className="text-gray-200 m-0 text-[0.92rem] leading-relaxed">{description}</p>
         </div>
 
         <div className="flex justify-between items-center mb-3 text-sm">
           <span className="font-semibold text-gray-200">By {author}</span>
-          <span className="text-gray-400 text-xs">
-            {date}
-          </span>
+          <span className="text-gray-400 text-xs">{date}</span>
         </div>
 
         <div className="flex items-center justify-between">
