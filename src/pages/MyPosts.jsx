@@ -74,7 +74,9 @@ export default function MyPosts() {
 
   return (
     <div className="max-w-[780px] mx-auto mt-12 p-8 pt-7 rounded-2xl bg-[#0b1020] border border-slate-700/30 shadow-[var(--shadow-soft)] max-md:p-6 max-md:mx-4">
-      <h2 className="mt-0 mb-6 text-3xl font-bold text-center">My Portfolio Posts</h2>
+      <h2 className="text-3xl font-bold mb-3 text-center tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)] ">
+        My Portfoliom
+      </h2>
       {loading && <div className="text-center text-gray-400">Loading...</div>}
       <div className="grid grid-cols-1 gap-6">
         {posts.map(post => <PostCard key={post.id} {...post} />)}

@@ -75,7 +75,9 @@ export default function Feed() {
 
   return (
     <div className="max-w-[960px] mx-auto mt-10 px-5 pb-14">
-      <h2 className="text-3xl font-bold mb-3 text-center">Portfolio Feed</h2>
+      <h1 className="text-3xl font-bold mb-3 text-center tracking-wide font-extrabold mb-2 bg-[linear-gradient(90deg,var(--logo-gradient))] bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(56,189,248,0.45)] ">
+    Portfoliom
+      </h1>
       {/* Search input */}
       <input
         type="text"
